@@ -1,0 +1,66 @@
+# Experience replay with a curated buffer: AnchorER, anchor removal, RandER, FixedER and the
+# nearest-neighbor ablation all use this algorithm (see memory_anchors/algos/anchor_er.py).
+# The presets in config/method/ set `selection_mode` and the selection_cfg fields below.
+_target_: memory_anchors.algos.anchor_er.AnchorER
+
+base_learner: ${model}
+
+# ER buffer size: an example count (filter_size_mode=examples) or a proportion of all
+# past-task data (filter_size_mode=prop). Paper: 1000 examples (Fig. 2, Fig. 6 left) or 1% (Fig. 6 right).
+filter_size: 1000
+filter_size_mode: examples
+
+batch_size: ${dataloader.batch_size}     # replay samples per step (in addition to the new-task batch)
+num_workers: ${dataloader.num_workers}
+
+preload_dataset: ${task.preload_dataset}  # optional pretraining set treated as "past data"
+add_new_data: true                        # add each finished task to the past-data pool
+er_weight: 1
+
+# random_baseline (RandER) | random_baseline_sequential (FixedER) |
+# nearest_neighbor_ood (Memory Anchors) | nearest_neighbor (ablation without action disagreement)
+selection_mode: random_baseline
+
+representation_cfg:
+  individually_normalized: false
+  use_select_keys: false          # false: full observation latent (images + proprio + language)
+  keep_modalities: ['agentview_rgb', 'eye_in_hand_rgb']
+
+selection_cfg:
+  # Step 1: observation overlap (KMeans on lower-tail kNN distance statistics)
+  id_partition: true
+  partition_device: cuda          # cuda | cpu (cpu saves VRAM, slower)
+  # Step 2: action disagreement via noise-denoise. noise_level is a DDIM *training* timestep
+  # (0 <= noise_level < num_train_timesteps = 50); threshold = mean + std_cutoff * std on held-out old data.
+  noise_level: 20
+  std_cutoff: 2
+  # Step 3: retrieval score = median distance to the n_neighbors closest disagreeing new samples
+  n_neighbors: 5
+  consolidation: median           # median | mean
+
+  # AnchorER (addition): fraction of the buffer filled at random; the rest are Memory Anchors.
+  # random_proportion=0.9 -> 10% anchors, 0.8 -> 20% anchors.
+  random_proportion: 0.9
+
+  # Anchor removal (subtraction): exclude the top `invert_remove_proportion` of past data
+  # (closest to the disagreeing new data), then sample the whole buffer uniformly from the rest.
+  invert_selection: false
+  invert_remove_proportion: 0.10
+
+  # FixedER (random_baseline_sequential): per_task keeps `filter_size` per past task (LIBERO's
+  # reference ER, used in the paper; total memory grows with #tasks), total splits one buffer of
+  # `filter_size` equally across past tasks. Identical in prop mode.
+  sequential_budget: per_task
+
+  # Model mode during selection. The paper's results used train mode (false), i.e. the
+  # train-time image augmentations are active while computing latents / disagreement.
+  selection_eval_mode: false
+
+  # unused in the paper (kept for completeness)
+  ramp_task_contribution: false
+  ramp_prop: 0.5
+  counterexample: false
+  counterexample_cfg:
+    orthogonal_task_shift: false
+    orthogonal_travel_scale: 0.3
+    ramp_rate: 1

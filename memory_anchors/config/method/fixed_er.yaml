@@ -1,0 +1,11 @@
+# @package _global_
+# FixedER (Fig. 2): LIBERO's reference ER. Keeps a fixed prefix of every past task (correlated,
+# episode-level samples) and never re-samples. sequential_budget=per_task matches the paper
+# (filter_size per past task); use `total` for an equal-memory comparison with RandER.
+defaults:
+  - override /learning_algorithm: anchor_er
+
+learning_algorithm:
+  selection_mode: random_baseline_sequential
+  selection_cfg:
+    sequential_budget: per_task

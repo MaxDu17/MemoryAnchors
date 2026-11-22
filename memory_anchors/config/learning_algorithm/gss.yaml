@@ -1,0 +1,20 @@
+# Gradient-based Sample Selection, GSS-Greedy (Aljundi et al., 2019): stream each finished task
+# into a persistent buffer, keeping samples with diverse gradients.
+_target_: memory_anchors.algos.gss.GSSEpisodicReplay
+
+base_learner: ${model}
+
+filter_size: 1000
+filter_size_mode: examples
+
+batch_size: ${dataloader.batch_size}
+num_workers: ${dataloader.num_workers}
+
+preload_dataset: ${task.preload_dataset}
+add_new_data: true
+er_weight: 1
+
+gss_cfg:
+  n_grad_compare: 10       # random buffer gradients used to score each candidate
+  max_new_examples: null   # cap on streamed examples per finished task (null = all)
+  score_eps: 1.0e-8

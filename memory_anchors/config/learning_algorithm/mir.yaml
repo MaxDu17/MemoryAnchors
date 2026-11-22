@@ -1,0 +1,21 @@
+# Maximally Interfered Retrieval (Aljundi et al., 2019): random buffer, but each step replays the
+# candidates whose loss would increase most under a virtual SGD step on the current batch.
+_target_: memory_anchors.algos.mir.MIREpisodicReplay
+
+base_learner: ${model}
+
+filter_size: 1000
+filter_size_mode: examples
+
+batch_size: ${dataloader.batch_size}
+num_workers: ${dataloader.num_workers}
+
+preload_dataset: ${task.preload_dataset}
+add_new_data: true
+er_weight: 1
+
+mir_cfg:
+  subsample: 64                          # candidates scored per step
+  retrieve_size: ${dataloader.batch_size} # top-k replayed per step
+  virtual_lr: ${optimizer.lr}            # step size of the virtual update (scoring only)
+  log_every: 1                           # record selected indices every N steps

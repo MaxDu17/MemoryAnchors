@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Data, caches and experiment outputs (see README)
+/data/
+/cache/
+/outputs/
+wandb/
+*.ckpt
+MUJOCO_LOG.TXT
+robosuite.log
+
+# Repo-local LIBERO path config written on first import (third_party/LIBERO/libero/libero/__init__.py)
+third_party/LIBERO/.libero/
+
+.DS_Store
+.vscode/
+.idea/

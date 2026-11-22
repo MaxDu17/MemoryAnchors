@@ -1,0 +1,44 @@
+# LIBERO-Goal: 10 tasks learned in sequence.
+defaults:
+  - libero_defaults
+
+name: libero_goal
+dataset_path: &dataset_path ${data_root:}/libero_abs/libero_goal
+include_file_filters: []
+
+# Canonical LIBERO task order; task_order_index selects one of LIBERO's 21 benchmark
+# permutations of it (the paper uses orders 0, 1, 2).
+tasks_to_evaluate: [
+  "open_the_middle_drawer_of_the_cabinet_demo",
+  "put_the_bowl_on_the_stove_demo",
+  "put_the_wine_bottle_on_top_of_the_cabinet_demo",
+  "open_the_top_drawer_and_put_the_bowl_inside_demo",
+  "put_the_bowl_on_top_of_the_cabinet_demo",
+  "push_the_plate_to_the_front_of_the_stove_demo",
+  "put_the_cream_cheese_in_the_bowl_demo",
+  "turn_on_the_stove_demo",
+  "put_the_bowl_on_the_plate_demo",
+  "put_the_wine_bottle_on_the_rack_demo"
+]
+task_order_index: 0
+task_order_permutation: null
+testing_tasks: ${oc.create:${libero_task_order:${.tasks_to_evaluate},${.task_order_index},${.task_order_permutation}}}
+
+preload_dataset: null
+
+dataset:
+  _target_: memory_anchors.dataset.libero_replay_image_dataset.LiberoSequentialTaskDataset
+  dataset_path: *dataset_path
+  task_order: ${..testing_tasks}
+  val_ratio: 0.10
+  include_file_filters: ${..include_file_filters}
+
+env_runner:
+  dataset_path: *dataset_path
+  multi_bddl_path: ${libero_bddl_dir:libero_goal}
+
+sequential: true
+epochs_per_task: 50
+evals_per_task: 1          # evaluate once at the end of each task (plus the untrained step-0 checkpoint)
+number_tasks: ${eval:'len(${task.dataset.task_order})'}
+use_finetuned_language_encoder: false

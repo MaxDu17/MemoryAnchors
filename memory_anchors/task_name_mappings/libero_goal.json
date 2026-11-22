@@ -1,0 +1,12 @@
+{
+  "open_the_middle_drawer_of_the_cabinet": "open_the_middle_layer_of_the_drawer",
+  "open_the_top_drawer_and_put_the_bowl_inside": "open_the_top_layer_of_the_drawer_and_put_the_bowl_inside",
+  "push_the_plate_to_the_front_of_the_stove": "push_the_plate_to_the_front_of_the_stove",
+  "put_the_bowl_on_the_plate": "put_the_bowl_on_the_plate",
+  "put_the_bowl_on_the_stove": "put_the_bowl_on_the_stove",
+  "put_the_bowl_on_top_of_the_cabinet": "put_the_bowl_on_the_top_of_the_drawer",
+  "put_the_cream_cheese_in_the_bowl": "put_the_cream_cheese_on_the_bowl",
+  "put_the_wine_bottle_on_the_rack": "put_the_wine_bottle_on_the_rack",
+  "put_the_wine_bottle_on_top_of_the_cabinet": "put_the_wine_bottle_on_the_top_of_the_drawer",
+  "turn_on_the_stove": "turn_on_the_stove"
+}

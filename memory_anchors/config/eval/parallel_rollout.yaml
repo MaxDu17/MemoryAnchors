@@ -1,0 +1,5 @@
+# Overlay merged onto a run's saved .hydra/config.yaml by memory_anchors/evaluate.py.
+_target_: memory_anchors.workspace.eval_workspace.ParallelizedRolloutPolicyWorkspace
+
+rollout:
+  checkpoint_path: null   # set by evaluate.py

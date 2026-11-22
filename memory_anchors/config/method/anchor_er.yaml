@@ -1,0 +1,11 @@
+# @package _global_
+# AnchorER (Sec. 5.2): fill (1 - random_proportion) of the buffer with Memory Anchors and the rest
+# uniformly at random. Default 10% anchors; set learning_algorithm.selection_cfg.random_proportion=0.8 for 20%.
+defaults:
+  - override /learning_algorithm: anchor_er
+
+learning_algorithm:
+  selection_mode: nearest_neighbor_ood
+  selection_cfg:
+    random_proportion: 0.9
+    invert_selection: false

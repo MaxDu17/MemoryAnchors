@@ -1,0 +1,7 @@
+# @package _global_
+# RandER: uniform transition-level buffer, re-sampled from all past data at every task.
+defaults:
+  - override /learning_algorithm: anchor_er
+
+learning_algorithm:
+  selection_mode: random_baseline

@@ -1,0 +1,4 @@
+# @package _global_
+# MIR baseline (Table 2).
+defaults:
+  - override /learning_algorithm: mir

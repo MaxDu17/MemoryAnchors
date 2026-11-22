@@ -1,0 +1,46 @@
+# LIBERO-Long (LIBERO-10): 10 tasks learned in sequence.
+defaults:
+  - libero_defaults
+
+name: libero_10
+dataset_path: &dataset_path ${data_root:}/libero_abs/libero_10
+include_file_filters: []
+
+# Canonical LIBERO task order; task_order_index selects one of LIBERO's 21 benchmark
+# permutations of it (the paper uses orders 0, 1, 2).
+tasks_to_evaluate: [
+  "LIVING_ROOM_SCENE2_put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket_demo",
+  "LIVING_ROOM_SCENE2_put_both_the_cream_cheese_box_and_the_butter_in_the_basket_demo",
+  "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_demo",
+  "KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it_demo",
+  "LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate_demo",
+  "STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy_demo",
+  "LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate_demo",
+  "LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket_demo",
+  "KITCHEN_SCENE8_put_both_moka_pots_on_the_stove_demo",
+  "KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it_demo"
+]
+task_order_index: 0
+task_order_permutation: null
+testing_tasks: ${oc.create:${libero_task_order:${.tasks_to_evaluate},${.task_order_index},${.task_order_permutation}}}
+
+preload_dataset: null
+
+dataset:
+  _target_: memory_anchors.dataset.libero_replay_image_dataset.LiberoSequentialTaskDataset
+  dataset_path: *dataset_path
+  task_order: ${..testing_tasks}
+  val_ratio: 0.10
+  include_file_filters: ${..include_file_filters}
+
+env_runner:
+  dataset_path: *dataset_path
+  multi_bddl_path: ${libero_bddl_dir:libero_10}
+
+sequential: true
+# LIBERO-Long demos are longer; we train 80 epochs per task. NOTE: the paper's RandER-1000 and
+# FixedER-1000 LIBERO-Long runs (Fig. 2, Fig. 6 left baseline) used 50 epochs per task.
+epochs_per_task: 80
+evals_per_task: 1          # evaluate once at the end of each task (plus the untrained step-0 checkpoint)
+number_tasks: ${eval:'len(${task.dataset.task_order})'}
+use_finetuned_language_encoder: false

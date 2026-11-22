@@ -1,0 +1,11 @@
+# @package _global_
+# Anchor removal (Sec. 5.1): exclude the best `invert_remove_proportion` Memory Anchors from the
+# past data, then sample the whole buffer uniformly from what remains ("RandER -k%").
+defaults:
+  - override /learning_algorithm: anchor_er
+
+learning_algorithm:
+  selection_mode: nearest_neighbor_ood
+  selection_cfg:
+    invert_selection: true
+    invert_remove_proportion: 0.10

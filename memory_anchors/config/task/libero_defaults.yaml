@@ -1,0 +1,153 @@
+# Shared settings for the LIBERO suites (observation/action spec, env runner, augmentation).
+# Actions are ABSOLUTE end-effector poses (position + rot6d + gripper), converted from LIBERO's
+# delta actions by scripts/convert_to_abs_actions.py (stored as `abs_actions` in the hdf5 files).
+low_dim_obs_horizon: 2
+img_obs_horizon: 2
+action_horizon: 16
+include_file_filters: [] # if [] then include all dataset files, otherwise specify the names of the file without the hdf5 extensions such as `KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_demo`. It's recommended to specify a dataset.name_suffix that you don't use the original dataset with all the tasks. This setting also impacts which environments are loaded in the environment runner
+
+use_finetuned_language_encoder: false # NEW ADDITION 3/11 enable language encoder tuning
+
+# Optional MLP on precomputed task_language (null = disabled). Incompatible with use_finetuned_language_encoder.
+lang_embedding_mlp_cfg: null
+
+shape_meta: &shape_meta
+  image_resolution: 224
+  prompt_sequence_length: 768
+  max_prompt_full_demos: 1
+  prompt_chunk_n_actions: 10
+  max_sequence_length: 520 # longest demonstration in the libero dataset
+  use_prompting: false
+  prompt_sample_mode: pair
+  action:
+    horizon: ${task.action_horizon}
+    down_sample_steps: 1
+    type: low_dim
+    shape: [10]
+    rep: absolute # delta or absolute
+    components:
+      - type: pos
+        size: 3
+      - type: rot
+        size: 6
+      - type: gripper_width
+        size: 1
+  obs:
+    agentview_rgb: # `agentview_image` in simulator
+      horizon: ${task.img_obs_horizon}
+      down_sample_steps: 1
+      shape: [3, 224, 224]
+      type: rgb
+      prompt_type: observation
+    eye_in_hand_rgb: # `robot0_eye_in_hand_image` in simulator
+      horizon: ${task.img_obs_horizon}
+      down_sample_steps: 1
+      shape: [3, 224, 224]
+      type: rgb
+      prompt_type: observation
+    ee_pos: # `robot0_eef_pos` in simulator
+      shape: [3]
+      type: low_dim
+      horizon: ${task.low_dim_obs_horizon}
+      down_sample_steps: 1
+      prompt_type: proprioception
+    ee_ori: # in axis angle format in dataset, but converted into rot6d format before input to policy. Corresponds to `robot0_eef_quat` in simulator which is provided in quaternion xyzw format
+      shape: [6]
+      type: low_dim
+      horizon: ${task.low_dim_obs_horizon}
+      down_sample_steps: 1
+      prompt_type: proprioception
+    gripper_states: # (entries of form [x, -y], which are the positions of the fingers; `robot0_gripper_qpos` in simulator
+      shape: [2]
+      type: low_dim
+      horizon: ${task.low_dim_obs_horizon}
+      down_sample_steps: 1
+      prompt_type: proprioception
+    task_language:
+      shape: [768]
+      type: low_dim
+      horizon: 1
+      is_language: true
+      prompt_type: ignore
+    # task_language:
+    #   shape: [77] # CLIP token sequence length (max_length)
+    #   type: low_dim
+    #   horizon: 1
+    #   is_language: true
+    #   in_replay_buffer: false
+    #   prompt_type: ignore
+      # repeat_n_times: 8 # repeating language embedding empirically helps the policy pay more attention to the task description
+
+language_embedding: &language_embedding
+  _target_: memory_anchors.model.language.language_embedding.LanguageEmbedding
+  model_name: "sentence-transformers/sentence-t5-base"
+
+env_runner:
+  _target_: memory_anchors.env_runner.libero_image_runner.LiberoImageRunner
+  language_embedding: *language_embedding
+  use_finetuned_language_encoder: ${task.use_finetuned_language_encoder}
+  text_encoder_model_name: ${oc.select:model.obs_encoder.text_encoder_model_name,null}
+  crf: 22
+  fps: 10
+  max_steps: 500        # same horizon for every suite (not LIBERO's per-suite default)
+  n_envs: 10 
+  n_test: 50            # the 50 LIBERO benchmark init states per task
+  n_test_vis: 10        # rollout videos saved per task
+  n_train: 0 #10 # keep this as sanity check 
+  n_train_vis: 0 #1
+  render_obs_key: [agentview_image, robot0_eye_in_hand_image]
+  test_start_seed: 100000
+  tqdm_interval_sec: 1.0
+  shape_meta: ${shape_meta}
+  include_file_filters: ${..include_file_filters}
+  exec_action_horizon: 12 # for executing just part of the prediction action horizon
+  vis_prompt: false
+  vis_actions_rollout: false
+  vis_proprio_rollout: false
+  vis_trajectory_video: false
+  replay_dataset_action: false # if you want to use the action from the replay dataset, otherwise it will use the action from the policy network
+  vis_attention_map: false
+  vis_env_index: 0
+  run_train_config: true
+  save_sim_states: false  # save final sim states for offline multi-BDDL failure analysis
+
+eval_image_transforms:
+  _target_: memory_anchors.common.augmentation.ImageAugmentation
+  shape_meta: ${shape_meta}
+  transforms:
+    - type: CenterCrop
+      ratio: 0.95
+
+train_image_transforms:
+  _target_: memory_anchors.common.augmentation.ImageAugmentation
+  shape_meta: ${shape_meta}
+  transforms:
+    - type: RandomCrop
+      ratio: 0.95
+    - _target_: torchvision.transforms.ColorJitter
+      brightness: 0.3
+      contrast: 0.4
+      saturation: 0.5
+      hue: 0.08
+
+sequential: false 
+epochs_per_task: 120 # this is overridden by default 
+number_tasks: 10 # this is overridden by default 
+evals_per_task: 2 # this should be overridden by default 
+
+
+dataset:
+  _target_: memory_anchors.dataset.libero_replay_image_dataset.LiberoMultiTaskDataset
+  shape_meta: ${shape_meta}
+  action_padding: true
+  language_embedding: *language_embedding
+  seed: 42
+  use_cache: true
+  overwrite_cache: false
+  val_ratio: 0.10
+  sample_type: task
+  max_segments: -1 # max segments in sampler
+  name_suffix: ""
+  include_file_filters: ${..include_file_filters}
+  use_finetuned_language_encoder: ${task.use_finetuned_language_encoder}
+  text_encoder_model_name: ${oc.select:model.obs_encoder.text_encoder_model_name,null}

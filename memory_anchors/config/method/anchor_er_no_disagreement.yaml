@@ -1,0 +1,11 @@
+# @package _global_
+# Ablation "Ours-ActionDis" (Table 2): AnchorER without the action-disagreement step, i.e. plain
+# nearest-neighbor retrieval of old data closest to all new-task data.
+defaults:
+  - override /learning_algorithm: anchor_er
+
+learning_algorithm:
+  selection_mode: nearest_neighbor
+  selection_cfg:
+    random_proportion: 0.9
+    invert_selection: false
