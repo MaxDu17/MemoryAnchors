@@ -21,6 +21,7 @@ pretraining_tasks: [
   "put_the_cream_cheese_in_the_bowl_demo",
   "turn_on_the_stove_demo",
 ]
+task_order_index: 0   # unused (single new task); kept so the launcher can pass it
 # The new task trained from the checkpoint.
 testing_tasks: [
   "put_the_bowl_on_the_plate_demo",

@@ -1,0 +1,74 @@
+# conda env create -f environment.yml && conda activate memory_anchors
+#
+# Pins follow the environment used for the paper's LIBERO experiments (Python 3.10, CUDA 12.8 wheels).
+# For older CUDA drivers swap the two torch lines, e.g.
+#   torch==2.7.1 --index-url https://download.pytorch.org/whl/cu118
+#   torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu118
+name: memory_anchors
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - ffmpeg=*=gpl_*           # h264 encoder for rollout videos
+  # gym==0.21.0 only builds with these older packaging tools
+  - pip==24.0
+  - setuptools==65.5.0
+  - wheel==0.38.4
+  - pip:
+      - torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
+      - torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
+      # learning
+      - accelerate==1.10.1
+      - diffusers==0.35.1
+      - transformers==4.57.1
+      - sentence-transformers==5.1.1
+      - huggingface_hub==0.35.3
+      - safetensors==0.6.2
+      - timm==1.0.20
+      - einops==0.6.1
+      - hydra-core==1.2.0
+      - omegaconf==2.3.1
+      - wandb==0.15.8
+      # numerics / data
+      - numpy==1.26.4
+      - scipy==1.15.3
+      - scikit-learn==1.7.2
+      - pandas==2.3.3
+      - h5py==3.16.0
+      - zarr==2.16.0
+      - numcodecs==0.13.1
+      - imagecodecs==2023.9.18
+      - numba==0.61.2
+      - threadpoolctl==3.2.0
+      - filelock
+      - dill==0.3.7
+      - cloudpickle==2.1.0
+      - pyyaml
+      - tqdm
+      - click
+      # vision / video / plotting
+      - opencv-python==4.11.0.86
+      - imageio==2.37.3
+      - imageio-ffmpeg==0.6.0
+      - av==17.1.0
+      - pillow
+      - matplotlib==3.10.9
+      - seaborn==0.13.2
+      # simulation (LIBERO on robosuite 1.4 / MuJoCo 3; no mujoco_py needed)
+      - mujoco==3.3.0
+      - robosuite==1.4.0
+      - bddl==1.0.1
+      - gym==0.21.0
+      - easydict==1.9
+      - future==0.18.2
+      - transforms3d==0.4.2
+      # used by the vendored robomimic
+      - termcolor
+      - psutil
+      - tensorboardX
+      - six
+      # vendored third-party packages + this repo (editable)
+      - -e third_party/diffusion_policy
+      - -e third_party/robomimic
+      - --config-settings editable_mode=compat -e third_party/LIBERO
+      - -e .

@@ -41,6 +41,7 @@ SUITES = {  # alias -> (hydra task, output folder)
     "long": ("libero_10", "Libero10"),
     "object": ("libero_object", "LiberoObject"),
     "spatial": ("libero_spatial", "LiberoSpatial"),
+    "goal_resample": ("libero_goal_resample", "LiberoGoal"),  # Fig. 2B (see experiments/buffer_resampling.sh)
 }
 for _alias, (_task, _folder) in list(SUITES.items()):
     SUITES[_task] = (_task, _folder)

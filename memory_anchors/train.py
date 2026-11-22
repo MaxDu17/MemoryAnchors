@@ -1,38 +1,34 @@
-"""
-Usage:
-Training:
-python train.py --config-name=train_policy_workspace
-"""
+"""Train a diffusion policy on a LIBERO suite, one task after another, with experience replay.
 
-import memory_anchors  # noqa: F401  (registers OmegaConf resolvers)
+    python memory_anchors/train.py task=libero_goal method=anchor_removal task.task_order_index=0
+
+Config: memory_anchors/config/train.yaml (+ task/, model/, learning_algorithm/, method/ groups).
+Usually launched through scripts/launch.py, which runs a grid of suites x task orders on local GPUs.
+"""
+import pathlib
 
 import hydra
 from omegaconf import OmegaConf
-import pathlib
 
+import memory_anchors  # noqa: F401  (registers OmegaConf resolvers)
 from diffusion_policy.workspace.base_workspace import BaseWorkspace
-from memory_anchors.utils.libero_task_order import (
-    register_libero_task_order_resolver,
-)
+from memory_anchors.utils.libero_task_order import register_libero_task_order_resolver
 
-# allows arbitrary python code execution in configs using the ${eval:''} resolver
-OmegaConf.register_new_resolver("eval", eval, replace=True)
 register_libero_task_order_resolver()
 
+
 @hydra.main(
-    version_base='1.2',
-    config_path=str(pathlib.Path(__file__).parent.joinpath('config'))
+    version_base="1.2",
+    config_path=str(pathlib.Path(__file__).parent.joinpath("config")),
+    config_name="train",
 )
 def main(cfg: OmegaConf):
-    # resolve immediately so all the ${now:} resolvers
-    # will use the same time.
-    print("[Train.py] Starting!")
+    # resolve immediately so all ${now:} resolvers use the same time
     OmegaConf.resolve(cfg)
-
     cls = hydra.utils.get_class(cfg._target_)
     workspace: BaseWorkspace = cls(cfg)
-    print("[Train.py] Class created! Ready to start workspace!")
     workspace.run()
+
 
 if __name__ == "__main__":
     main()
