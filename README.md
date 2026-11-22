@@ -16,8 +16,9 @@ the policy's latent space, while the two tasks require different actions. This r
 - **Infrastructure:** a multi-GPU launcher, a checkpoint evaluator, metric and plotting code, and the per-run metrics behind the paper's LIBERO figures.
 
 Everything runs on the four LIBERO suites (Goal, Long/LIBERO-10, Object, Spatial) with a U-Net
-diffusion policy trained from scratch. The π0.5 VLA experiments (Sec. 5.3) and the real-robot
-experiments (Sec. 5.4) are **not** part of this release.
+diffusion policy trained from scratch. The π0.5 VLA experiments (Sec. 5.3, Table 1) are in a separate
+repository, [MaxDu17/MemoryAnchors_VLA](https://github.com/MaxDu17/MemoryAnchors_VLA). The
+real-robot experiments (Sec. 5.4) are not part of this release.
 
 ---
 

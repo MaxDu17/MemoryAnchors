@@ -56,5 +56,7 @@ Run `reproduce_paper.sh` to regenerate these numbers.
 
 ## Not included
 
-The real-robot (OpenJar, SweaterFold) and π0.5 VLA results of the paper are not part of this
-release, and neither are the buffer-size sweep (Fig. 12) and the qualitative render / t-SNE tools.
+The π0.5 VLA results (Sec. 5.3, Table 1) are in
+[MaxDu17/MemoryAnchors_VLA](https://github.com/MaxDu17/MemoryAnchors_VLA). Not included at all: the
+real-robot results (OpenJar, SweaterFold), the buffer-size sweep (Fig. 12), and the qualitative
+render / t-SNE tools.
