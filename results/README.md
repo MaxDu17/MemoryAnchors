@@ -17,7 +17,8 @@ Each run folder mirrors a real training run (`outputs/<exp>/<Suite>/<run>/`):
 
 Run `python plotting/compute_metrics.py <experiment>/<Suite> --batch-parent --libero_split <suite>` to
 create `generated_visuals/` (metrics) inside each run. The task order of a run is the `orderXX` in
-its name (LIBERO's benchmark permutation index); every run uses `training.seed=3`.
+its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`; `RandER_1000` and
+`FixedER_1000` used seed 42, and `RandER_resampling` uses seeds 1-4 by design.
 
 ## Experiments
 
@@ -47,7 +48,8 @@ its name (LIBERO's benchmark permutation index); every run uses `training.seed=3
 | MIR_1pct / GSS_1pct / AnchorER-NoDisagreement_1pct | – | 7 ² | – | – |
 | RandER_resampling | – | 4 | – | – |
 
-¹ orders 0-2 were launched twice; both copies are kept, as in the paper's Table 3.
+¹ orders 0-2 were run twice, with seeds 1 and 2 (there is no seed-3 run for this cell). The paper's
+  Table 3 pools all six; its SEMs match the 6-run values.
 ² orders 0-5 and 7 (GSS: 0-6). The paper's high-conflict analysis (Fig. 6 right) and its LIBERO-Goal
   RandER numbers in Tables 2 and 4 use orders 0-2 only (`--orders 0,1,2`); everything else uses all runs.
 ³ the order-2 run is excluded (see below).

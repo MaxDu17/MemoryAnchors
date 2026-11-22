@@ -50,7 +50,7 @@ optimizer:                # AdamW
   weight_decay: 1.0e-4
 
 training:
-  seed: 3                 # all paper runs use seed 3; variation comes from task.task_order_index
+  seed: 3                 # most paper runs use seed 3 (see results/README.md); variation comes from task.task_order_index
   debug: false
   gradient_accumulate_every: 1
   lr_scheduler: cosine

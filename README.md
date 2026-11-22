@@ -245,8 +245,10 @@ The Table 2 Anchor Concentration row needs checkpoints and a GPU
 4. `plotting/compare_methods.py` (method × suite tables and plots) produces the final comparisons.
 
 **Task orders.** `task.task_order_index` selects one of LIBERO's 21 benchmark permutations of each
-suite. The paper uses orders 0, 1 and 2, and all paper runs use `training.seed=3`; run-to-run variation
-therefore comes from the task order.
+suite. The paper uses orders 0, 1 and 2. Most paper runs use `training.seed=3` (the default here), so
+run-to-run variation mostly comes from the task order. The exceptions: RandER-1000 and FixedER-1000
+used seed 42, and the RandER −5% LIBERO-Goal runs are orders 0–2 run with seeds 1 and 2
+(see [results/README.md](results/README.md)).
 
 **Evaluation output** (`<step>.ckpt.json`, JSON-lines; read the last line). Keys are prefixed with
 `test/<suite>/` or `means_test/<suite>/`. Task names are LIBERO's original BDDL names, e.g.
