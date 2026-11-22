@@ -39,7 +39,7 @@ its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`
 |---|---|---|---|---|
 | RandER_1000 | 3 | 3 | 3 | 3 |
 | RandER-1pct_1000 | 3 | 3 | 3 | 3 |
-| RandER-5pct_1000 | 3 | 6 ¹ | 3 | 3 |
+| RandER-5pct_1000 | 3 | 3 ¹ | 3 | 3 |
 | RandER-10pct_1000 | 3 | 3 | 3 | 3 |
 | RandER_1pct | 3 | 7 ² | 3 | 6 ² |
 | AnchorER-10_1pct | 3 | 7 ² | 3 | 4 ² |
@@ -48,8 +48,9 @@ its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`
 | MIR_1pct / GSS_1pct / AnchorER-NoDisagreement_1pct | – | 7 ² | – | – |
 | RandER_resampling | – | 4 | – | – |
 
-¹ orders 0-2 were run twice, with seeds 1 and 2 (there is no seed-3 run for this cell). The paper's
-  Table 3 pools all six; its SEMs match the 6-run values.
+¹ seed 1. Orders 0-2 of this cell were run twice, with seeds 1 and 2 (no seed-3 run exists); only the
+  seed-1 runs are shipped. The paper's Table 3 pooled all six, so this cell's NBT reproduces as
+  0.19 ± 0.04 instead of the paper's 0.20 ± 0.03.
 ² orders 0-5 and 7 (GSS: 0-6). The paper's high-conflict analysis (Fig. 6 right) and its LIBERO-Goal
   RandER numbers in Tables 2 and 4 use orders 0-2 only (`--orders 0,1,2`); everything else uses all runs.
 ³ the order-2 run is excluded (see below).

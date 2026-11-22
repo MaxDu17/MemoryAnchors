@@ -47,7 +47,7 @@ Run `reproduce_paper.sh` to regenerate these numbers.
 
 | Item | Reproduced | Paper | Note |
 |---|---|---|---|
-| Table 3 / Fig. 6 left (all cells) | identical NBT; FWT/AUC within 0.01 | | |
+| Table 3 / Fig. 6 left | identical NBT except LIBERO-Goal −5% (0.19 vs 0.20); FWT/AUC within 0.01 | | the paper pooled two seeds for that cell; one is shipped (see results/README.md) |
 | Fig. 6 right averages RandER → AnchorER 10% / 20% | 0.38 → 0.13 / 0.16 | 0.38 → 0.14 / 0.16 | identical to the paper's figure data |
 | Table 4 (all cells except below) | within 0.01 | | |
 | Table 4 / Table 2, LIBERO-Goal RandER NBT | 0.16 (7 orders) | 0.18 | the paper used orders 0-2 for this cell (`--orders 0,1,2` gives 0.18 / 0.79 AUC) |
