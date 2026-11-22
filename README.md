@@ -40,7 +40,7 @@ real-robot experiments (Sec. 5.4) are not part of this release.
 Requirements: Linux, an NVIDIA GPU with EGL support (headless MuJoCo rendering), conda.
 
 ```bash
-git clone https://github.com/<org>/MemoryAnchors.git
+git clone https://github.com/MaxDu17/MemoryAnchors.git
 cd MemoryAnchors
 conda env create -f environment.yml      # ~10 min; installs torch (CUDA 12.8 wheels) + the vendored packages
 conda activate memory_anchors
@@ -330,7 +330,7 @@ third_party/               vendored LIBERO, robomimic, diffusion_policy (see thi
 }
 ```
 
-This code builds on [Diffusion Policy](https://github.com/real-stanford/diffusion_policy),
+This repository is released under the [MIT License](LICENSE). It builds on [Diffusion Policy](https://github.com/real-stanford/diffusion_policy),
 [UMI](https://github.com/real-stanford/universal_manipulation_interface),
 [robomimic](https://github.com/ARISE-Initiative/robomimic) and
 [LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO); see [third_party/README.md](third_party/README.md)

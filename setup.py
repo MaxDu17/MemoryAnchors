@@ -8,4 +8,5 @@ setup(
     package_data={"memory_anchors": ["config/**/*.yaml", "config/*.yaml", "task_name_mappings/*.json"]},
     include_package_data=True,
     python_requires=">=3.10",
+    license="MIT",
 )
