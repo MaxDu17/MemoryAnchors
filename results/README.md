@@ -44,7 +44,7 @@ its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`
 | RandER_1pct | 3 | 7 ² | 3 | 6 ² |
 | AnchorER-10_1pct | 3 | 7 ² | 3 | 4 ² |
 | AnchorER-20_1pct | 3 | 3 | 3 | 3 |
-| FixedER_1000 | 2 ³ | 3 | 3 | 3 |
+| FixedER_1000 | 3 ³ | 3 | 3 | 3 |
 | MIR_1pct / GSS_1pct / AnchorER-NoDisagreement_1pct | – | 7 ² | – | – |
 | RandER_resampling | – | 4 | – | – |
 
@@ -53,7 +53,10 @@ its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`
   0.19 ± 0.04 instead of the paper's 0.20 ± 0.03.
 ² orders 0-5 and 7 (GSS: 0-6). The paper's high-conflict analysis (Fig. 6 right) and its LIBERO-Goal
   RandER numbers in Tables 2 and 4 use orders 0-2 only (`--orders 0,1,2`); everything else uses all runs.
-³ the order-2 run is excluded (see below).
+³ the order-2 run finished training, but its job was killed while evaluating the final checkpoint
+  (the original plotting code then reused the previous checkpoint for the last stage). That final
+  checkpoint (`388049.ckpt`) was evaluated afterwards with this release's `memory_anchors/evaluate.py`
+  (mean success 0.736 vs. 0.732 at the previous checkpoint).
 
 ## Excluded runs (not shipped)
 
@@ -61,7 +64,6 @@ its name (LIBERO's benchmark permutation index). Most runs use `training.seed=3`
 |---|---|---|---|
 | AnchorER-10_1pct | Long | 3, 4, 5 | training did not finish |
 | AnchorER-10_1pct | Spatial | 3, 5 | training did not finish (9/10 tasks) |
-| FixedER_1000 | Long | 2 | no evaluation of the final checkpoint (the original plotting code silently substituted the previous checkpoint for the last stage) |
 
 ## Notes
 

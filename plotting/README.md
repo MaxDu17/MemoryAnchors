@@ -52,7 +52,7 @@ Run `reproduce_paper.sh` to regenerate these numbers.
 | Table 4 (all cells except below) | within 0.01 | | |
 | Table 4 / Table 2, LIBERO-Goal RandER NBT | 0.16 (7 orders) | 0.18 | the paper used orders 0-2 for this cell (`--orders 0,1,2` gives 0.18 / 0.79 AUC) |
 | Table 2 Ours-ActionDis | 0.12 | 0.13 | |
-| Fig. 2A pooled-NBT variance, FixedER vs RandER | 32% lower | 36% lower | one FixedER LIBERO-Long run excluded (no final eval) |
+| Fig. 2A pooled-NBT variance, FixedER vs RandER | 37% lower | 36% lower | |
 
 ## Not included
 
