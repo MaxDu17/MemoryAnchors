@@ -13,3 +13,10 @@ launch --name AnchorER-10_1pct --method anchor_er --buffer 0.01 --suites goal \
 for name in MIR_1pct GSS_1pct AnchorER-NoDisagreement_1pct RandER_1pct AnchorER-10_1pct; do
   evaluate --root "outputs/$name"
 done
+
+# Table 2 (NBT row)
+metrics MIR_1pct GSS_1pct AnchorER-NoDisagreement_1pct RandER_1pct AnchorER-10_1pct
+python plotting/metrics_table.py --suites LiberoGoal \
+  --experiment-dirs outputs/AnchorER-10_1pct outputs/MIR_1pct outputs/GSS_1pct outputs/AnchorER-NoDisagreement_1pct outputs/RandER_1pct \
+  --labels Ours MIR GSS Ours-ActionDis RandER
+# Table 2 "Anchor Conc." needs the task-end checkpoints and a GPU: see analysis/anchor_concentration.py --help

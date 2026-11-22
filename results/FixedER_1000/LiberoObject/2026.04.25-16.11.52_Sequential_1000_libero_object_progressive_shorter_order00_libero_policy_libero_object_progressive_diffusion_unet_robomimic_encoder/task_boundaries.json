@@ -1,0 +1,42 @@
+[
+  {
+    "task_name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket_demo",
+    "end_step": 21949
+  },
+  {
+    "task_name": "pick_up_the_cream_cheese_and_place_it_in_the_basket_demo",
+    "end_step": 42299
+  },
+  {
+    "task_name": "pick_up_the_salad_dressing_and_place_it_in_the_basket_demo",
+    "end_step": 60799
+  },
+  {
+    "task_name": "pick_up_the_bbq_sauce_and_place_it_in_the_basket_demo",
+    "end_step": 81499
+  },
+  {
+    "task_name": "pick_up_the_ketchup_and_place_it_in_the_basket_demo",
+    "end_step": 104199
+  },
+  {
+    "task_name": "pick_up_the_tomato_sauce_and_place_it_in_the_basket_demo",
+    "end_step": 125149
+  },
+  {
+    "task_name": "pick_up_the_butter_and_place_it_in_the_basket_demo",
+    "end_step": 147249
+  },
+  {
+    "task_name": "pick_up_the_milk_and_place_it_in_the_basket_demo",
+    "end_step": 167649
+  },
+  {
+    "task_name": "pick_up_the_chocolate_pudding_and_place_it_in_the_basket_demo",
+    "end_step": 189949
+  },
+  {
+    "task_name": "pick_up_the_orange_juice_and_place_it_in_the_basket_demo",
+    "end_step": 209599
+  }
+]

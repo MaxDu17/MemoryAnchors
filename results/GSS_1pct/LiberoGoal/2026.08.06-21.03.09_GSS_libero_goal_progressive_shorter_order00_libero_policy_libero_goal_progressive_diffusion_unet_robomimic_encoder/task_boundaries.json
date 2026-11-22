@@ -1,0 +1,42 @@
+[
+  {
+    "task_name": "open_the_middle_drawer_of_the_cabinet_demo",
+    "end_step": 19749
+  },
+  {
+    "task_name": "put_the_bowl_on_the_stove_demo",
+    "end_step": 34049
+  },
+  {
+    "task_name": "put_the_wine_bottle_on_top_of_the_cabinet_demo",
+    "end_step": 49299
+  },
+  {
+    "task_name": "open_the_top_drawer_and_put_the_bowl_inside_demo",
+    "end_step": 77899
+  },
+  {
+    "task_name": "put_the_bowl_on_top_of_the_cabinet_demo",
+    "end_step": 92299
+  },
+  {
+    "task_name": "push_the_plate_to_the_front_of_the_stove_demo",
+    "end_step": 113899
+  },
+  {
+    "task_name": "put_the_cream_cheese_in_the_bowl_demo",
+    "end_step": 128899
+  },
+  {
+    "task_name": "turn_on_the_stove_demo",
+    "end_step": 141499
+  },
+  {
+    "task_name": "put_the_bowl_on_the_plate_demo",
+    "end_step": 154699
+  },
+  {
+    "task_name": "put_the_wine_bottle_on_the_rack_demo",
+    "end_step": 179699
+  }
+]

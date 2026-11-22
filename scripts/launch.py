@@ -14,7 +14,7 @@ Example (the starter anchor-removal experiment, LIBERO-Goal, 3 task orders):
 
 Outputs: outputs/<name>/<SuiteFolder>/<date>-<time>_<name>_<suite>_orderXX/ (one Hydra run dir per
 run), plus outputs/<name>/launch_state.json (resumable: completed runs are skipped on relaunch)
-and outputs/<name>/<SuiteFolder>/launch_logs/<run>.log (stdout/stderr of each run).
+and outputs/<name>/launch_logs/<run>.log (stdout/stderr of each run).
 """
 from __future__ import annotations
 
@@ -208,7 +208,7 @@ def main() -> int:
                 env = os.environ.copy()
                 env.update(MUJOCO_GL="egl", MUJOCO_EGL_DEVICE_ID=str(egl[gpu]), HYDRA_FULL_ERROR="1",
                            NUMBA_DISABLE_JIT="1", TOKENIZERS_PARALLELISM="false")
-                log_dir = run.folder / "launch_logs"
+                log_dir = args.out / "launch_logs"
                 log_dir.mkdir(parents=True, exist_ok=True)
                 log_path = log_dir / f"{run.exp_name}.log"
                 with log_path.open("w") as log_f:

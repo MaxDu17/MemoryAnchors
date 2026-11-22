@@ -11,3 +11,8 @@ launch --name RandER_1000 --method rand_er --buffer 1000 --suites "$SUITES"
 for name in FixedER_1000 RandER_1000; do
   evaluate --root "outputs/$name"
 done
+
+# Fig. 2A / Fig. 14
+metrics FixedER_1000 RandER_1000
+python plotting/fixed_vs_rand_violins.py --experiment-dirs outputs/FixedER_1000 outputs/RandER_1000 \
+  --labels FixedER RandER --output-dir figures/fixed_vs_rand

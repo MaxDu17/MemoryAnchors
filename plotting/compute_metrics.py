@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import bisect
 import json
+import re
 import textwrap
 import warnings
 from pathlib import Path
@@ -385,6 +386,22 @@ def plot_continual_success_matrix(conf_mat: np.ndarray, output_dir: Path, prefix
         plt.tight_layout()
         fig.savefig(output_dir / f"{prefix}continual_success_matrix.png", dpi=200, bbox_inches="tight")
         plt.close(fig)
+
+
+# ----------------------------------------------------------------------------- run selection
+def run_order(run_dir: Path) -> Optional[int]:
+    """LIBERO task-order index encoded in the run name (..._orderXX_...), or None."""
+    m = re.search(r"order(\d+)", Path(run_dir).name)
+    return int(m.group(1)) if m else None
+
+
+def parse_orders(raw: Optional[str]) -> Optional[Set[int]]:
+    """'0,1,2' -> {0, 1, 2}; None/'' -> None (= all runs)."""
+    return {int(x) for x in raw.split(",") if x.strip()} if raw else None
+
+
+def keep_run(run_dir: Path, orders: Optional[Set[int]]) -> bool:
+    return orders is None or run_order(run_dir) in orders
 
 
 # ----------------------------------------------------------------------------- driver

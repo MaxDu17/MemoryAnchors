@@ -113,7 +113,7 @@ python scripts/launch.py --name RandER-10pct_1000  --method anchor_removal --buf
     --set learning_algorithm.selection_cfg.invert_remove_proportion=0.10
 ```
 
-(`SUITES=goal GPUS=0,1,2,3 bash experiments/anchor_removal.sh` runs all four, then the evaluation.)
+(`SUITES=goal GPUS=0,1,2,3 bash experiments/anchor_removal.sh` runs all four, then the evaluation and the plots below.)
 Each `launch.py` call blocks until its runs finish. To use more GPUs at once, run the four commands
 in separate terminals. Each run gets its own Hydra directory:
 
@@ -147,7 +147,23 @@ Each checkpoint is ~0.7 GB, so `--delete-checkpoints-after-success` is useful on
 
 ### 4.3 Metrics and plots
 
-PLOTTING_STARTER_PLACEHOLDER
+```bash
+# per-run metrics: success matrix, FWT / NBT / AUC (writes generated_visuals/ inside every finished run)
+for exp in RandER_1000 RandER-1pct_1000 RandER-5pct_1000 RandER-10pct_1000; do
+  python plotting/compute_metrics.py outputs/$exp/LiberoGoal --batch-parent --libero_split libero_goal
+done
+
+EXPS="outputs/RandER_1000 outputs/RandER-1pct_1000 outputs/RandER-5pct_1000 outputs/RandER-10pct_1000"
+# Table 3 rows (mean ± SEM over tasks x orders)
+python plotting/metrics_table.py --experiment-dirs $EXPS \
+    --labels "100% (RandER)" "99% (RandER-1%)" "95% (RandER-5%)" "90% (RandER-10%)"
+# Fig. 6 (left): NBT bars (+ FWT / AUC and worst-case variants, and a json of all numbers)
+python plotting/compare_methods.py --pool-per-task --palette remove --prefix removeanchors --experiment-dirs $EXPS \
+    --labels RandER "RandER -1%" "RandER -5%" "RandER -10%" --output-dir figures/anchor_removal
+```
+
+Only runs that finished their whole task sequence (with an evaluation at every task boundary) are
+counted. `compute_metrics.py` marks them with `generated_visuals/complete.txt`.
 
 **Expected result** (paper, Table 3, LIBERO-Goal; mean ± SEM over 3 orders × 9 tasks). Removing
 just 10% of the anchors raises forgetting (NBT) about 8×, while the ability to learn each new
@@ -207,7 +223,17 @@ MUJOCO_GL=egl python memory_anchors/train.py task=libero_goal method=anchor_er t
 [results/](results/) contains the per-run evaluation summaries (task boundaries, per-checkpoint success
 rates and the resolved configs) of the runs behind the paper's LIBERO figures and tables.
 
-PLOTTING_RESULTS_PLACEHOLDER
+```bash
+bash plotting/reproduce_paper.sh            # -> figures/  (CPU, ~2 min)
+```
+
+This regenerates Fig. 2A/B, Fig. 3, Fig. 6 (left and right), Fig. 14 and Tables 2–4 (NBT / FWT / AUC);
+see [plotting/README.md](plotting/README.md) for the individual commands and
+[results/README.md](results/README.md) for the runs included per experiment. The numbers match the
+paper to within ±0.01. One exception: the paper's LIBERO-Goal RandER cell of Tables 2 and 4 uses task
+orders 0–2 only (0.18 NBT). With all 7 shipped orders it is 0.16 (`--orders 0,1,2` reproduces 0.18).
+The Table 2 Anchor Concentration row needs checkpoints and a GPU
+(`analysis/anchor_concentration.py`). The buffer-size sweep (Fig. 12) is not included.
 
 ## 6. Reference
 
